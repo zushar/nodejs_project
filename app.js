@@ -1,6 +1,12 @@
-var http = require('http');
-
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end('Hello World!');
-}).listen(8080);
+const express = require('express');
+const path = require('path');
+const http = require('http');
+require('./db/mongoConnect');
+require('dotenv').config();
+const { routesInit } = require('./routes/configRoutes');
+const app = express();
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+routesInit(app);
+const server = http.createServer(app);
+server.listen(process.env.PORT || 3001);
