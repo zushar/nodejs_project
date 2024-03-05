@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const joi = require('joi');
 const {string} = require("joi");
 
-const toysSchema = new mongoose.Schema({
+const toySchema = new mongoose.Schema({
     name: String,
     info: String,
     category: String,
@@ -10,9 +10,9 @@ const toysSchema = new mongoose.Schema({
     price: Number,
     user_id: String
 },{timestamps: true});
-exports.ToysModel = mongoose.model('toys', toysSchema);
+exports.ToyModel = mongoose.model('toys', toySchema);
 
-exports.validateToys = (_reqBody) => {
+exports.validateToy = (_reqBody) => {
     const schema = joi.object({
         name: joi.string().min(2).max(100).required(),
         info: joi.string().min(2).max(999).required(),
