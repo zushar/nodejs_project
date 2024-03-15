@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const { config } = require('../config/secret');
 
 exports.auth = (req, res, next) => {
-    const token = req.header('x-auth-token');
-    if (!token) return res.status(401).json({msg:"You need to send token"});
+    const token = req.header('x-api-token');
+    if (!token){ 
+        return res.status(401).json({msg:"You need to send token"});
+    }
     try {
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        req.tokenData = decodedToken;
+        req.tokenData = jwt.verify(token, config.JWT_SECRET);
         next();
     }
     catch (err) {

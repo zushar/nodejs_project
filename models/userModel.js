@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const { config } = require("../config/secret");
 
 const userSchema = new mongoose.Schema({
     name:String,
-    email:String,
+    email: {
+        type:String,
+        unique:true
+    },
     password:String,
     role:{
         type:String,
@@ -12,35 +16,29 @@ const userSchema = new mongoose.Schema({
         enum:["user","admin"],
         lowercase:true
         }
-},{timestamps:true})
+},{timestamps:true});
 
-exports.UserModel = mongoose.model("users",userSchema)
+exports.UserModel = mongoose.model("users",userSchema);
 
-exports.createToken = (user_id) => {
-    // jwt.sign - יצירת טוקן
-    // מקבל 3 פרמטרים, הראשון התכולה , במקרה שלנו האיי די של היוזר
-    // השני המילה הסודית , שתשמש אותנו כדי לפענח,ושלישי התוקף שלו
-    const token = jwt.sign({_id:user_id},"monkeysSecret",
-        {expiresIn:"180m"});
-    return token;
-}
-
-
-exports.validateUser = (_reqBody) => {
+exports.validateUser = (user) => {
     const joiSchema = Joi.object({
         name:Joi.string().min(2).max(100).required(),
         email:Joi.string().min(2).max(100).email().required(),
         password:Joi.string().min(3).max(20).required(),
         role:Joi.string().valid("user","admin").default("user").allow("",null)
     })
-    return joiSchema.validate(_reqBody)
+    return joiSchema.validate(user);
 }
 
 // וולדזציה להתחברות שבה צריך רק מייל וסיסמא מהמשתמש בבאדי
-exports.validateLogin = (_reqBody) => {
+exports.validateLogin = (user) => {
     const joiSchema = Joi.object({
         email:Joi.string().min(2).max(100).email().required(),
         password:Joi.string().min(3).max(20).required()
     })
-    return joiSchema.validate(_reqBody)
+    return joiSchema.validate(user);
+}
+
+exports.createToken = (_id, role) => {
+    return jwt.sign({_id, role}, config.JWT_SECRET, {expiresIn: "20d"});
 }

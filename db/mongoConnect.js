@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
+const { config } = require('../config/secret');
+//connect to mongoDB
 main().catch(err => console.log(err));
 async function main() {
-  await mongoose.connect(process.env.MONGO_URI);
+  await mongoose.connect(config.MONGO_URI);
   console.log('Connected to MongoDB');
 }

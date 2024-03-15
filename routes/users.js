@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const {UserModel,validateUser,validateLogin,createToken} = require('../models/userModel');
-const {auth} = require('../middiewares/auth');
 const bcrypt = require('bcrypt');
 
-router.get('/', (req, res) => {
-    res.json({ message: 'users' });
-})
+router.get("/",(req,res) => {
+    res.json({msg:"users endpoint"})
+  })
 
+//route to create a new user
+//localhost:3001/users
 router.post('/', async (req, res) => {
     const validBody = validateUser(req.body);
     if (validBody.error){
@@ -21,13 +22,14 @@ router.post('/', async (req, res) => {
         res.status(201).json(user);
     }catch (err){
         if (err.code === 11000){
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(400).json({ message: "User already exists" ,code: 11000});
         }
         console.log(err);
         res.status(502).json({err});
     }
 })
-
+//route to login a user
+//localhost:3001/users/login
 router.post('/login', async (req, res) => {
     const validBody = validateLogin(req.body);
     if(validBody.error){
@@ -44,9 +46,8 @@ router.post('/login', async (req, res) => {
         if(!validPass){
             return res.status(401).json({err:"password not match"});
         }
-        const token = createToken(user._id)
-        // נצטרך לשלוח לצד לקוח טוקן
-        res.json({token})
+        const token = createToken(user._id, user.role);
+        res.status(200).json({token,role:user.role});
     }
     catch(err){
         console.log(err);
