@@ -48,16 +48,6 @@
                 </tr>
                 <tr>
                     <td>GET</td>
-                    <td>/toys/:_id</td>
-                    <td>Retrieves a specific toy by its MongoDB ID.</td>
-                    <td>
-                        <ul>
-                            <li>_id (Path Parameter): The MongoDB ID of the toy to retrieve.</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>GET</td>
                     <td>/toys/:category</td>
                     <td>Retrieves toys belonging to a specific category.</td>
                     <td>
@@ -66,7 +56,16 @@
                         </ul>
                     </td>
                 </tr>
-
+                <tr>
+                    <td>GET</td>
+                    <td>/toys/single/:id</td>
+                    <td>Retrieves a specific toy by its MongoDB ID.</td>
+                    <td>
+                        <ul>
+                            <li>_id (Path Parameter): The MongoDB ID of the toy to retrieve.</li>
+                        </ul>
+                    </td>
+                </tr>
                 <td>POST</td>
                 <td>/toys</td>
                 <td>Adds a new toy. Requires authentication.(token required)</td>

@@ -71,6 +71,17 @@ try {
 }
 });
 
+// http://localhost:3001/toys/single/:id
+router.get('/single/:id', async(req, res) => {
+   
+  try {
+      const data = await ToyModel.findOne({ _id: req.params.id });
+      res.json(data);
+  } catch (err) {
+      res.status(502).json(err);
+  }
+})
+
 // http://localhost:3001/toys
 //need to send token in the header key:x-api-key
 router.post('/', auth, async(req, res) => {
