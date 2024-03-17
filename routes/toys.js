@@ -76,7 +76,10 @@ router.get('/single/:id', async(req, res) => {
    
   try {
       const data = await ToyModel.findOne({ _id: req.params.id });
-      res.json(data);
+      if (!data) {
+        res.status(404).json({ msg: "Toy not found" });
+    }
+      res.status(200).json(data);
   } catch (err) {
       res.status(502).json(err);
   }
