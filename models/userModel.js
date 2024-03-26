@@ -25,12 +25,12 @@ exports.validateUser = (user) => {
         name:Joi.string().min(2).max(100).required(),
         email:Joi.string().min(2).max(100).email().required(),
         password:Joi.string().min(3).max(20).required(),
-        role:Joi.string().valid("user","admin").default("user").allow("",null)
+        role:Joi.string().valid("user").default("user").allow("",null)
     })
     return joiSchema.validate(user);
 }
 
-// וולדזציה להתחברות שבה צריך רק מייל וסיסמא מהמשתמש בבאדי
+// validate login data 
 exports.validateLogin = (user) => {
     const joiSchema = Joi.object({
         email:Joi.string().min(2).max(100).email().required(),

@@ -105,12 +105,12 @@ router.put('/:id', auth, async(req, res) => {
   const { error } = validateToy(req.body);
   if (error) return res.status(400).json(error.details[0].message);
   try {
-      const data = await ToyModel.findOne({ _id: req.params.id });
-      if (!data.user_id.equals(req.tokenData._id)) return res.status(401).json({ msg: "You can't edit this toy" });
-      const updated = await ToyModel.updateOne({ _id: req.params.id }, req.body);
-      res.json(updated);
+    const id = req.params.id;
+      const data = await ToyModel.updateOne({ _id: id, user_id: req.tokenData._id }, req.body)
+      res.json(data);
   } catch (err) {
-      res.status(502).json(err);
+    console.log("You can't edit this toy" );
+    res.status(502).json(err);
   }
 })
 // http://localhost:3001/toys/_id
@@ -118,11 +118,11 @@ router.put('/:id', auth, async(req, res) => {
 router.delete('/:id', auth, async(req, res) => {
 
 try {
-  const data = await ToyModel.findOne({ _id: req.params.id });
-  if (!data.user_id.equals(req.tokenData._id)) return res.status(401).json({ msg: "You can't edit this toy" });
-  const deleted = await ToyModel.deleteOne({ _id: req.params.id });
-  res.json(deleted);
+    const id = req.params.id;
+    const data = await ToyModel.deleteOne({ _id: id, user_id: req.tokenData._id });
+  res.json(data);
 } catch (err) {
+    console.log("You can't edit this toy" );
   res.status(502).json(err);
 }
 })
